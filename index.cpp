@@ -3,60 +3,61 @@
 #include <algorithm>
 #include <ctime>
 #include <iomanip>
-#include <chrono>
 
 #include "sequential_search.cpp"
 #include "binary_search.cpp"
 
-using namespace std;
-
-int main() {
+int main()
+{
     srand(time(0));
-    vector<int> sizes = {32, 1024, 65536};
-    
-    const int REPETITIONS = 50000;
 
-    cout << "Tabel Komparasi Waktu Eksekusi Rata-Rata (dalam nanodetik)" << endl;
-    cout << "----------------------------------------------------------------------" << endl;
-    cout << "| " << left << setw(20) << "Ukuran Data (n)"
-              << "| " << left << setw(20) << "Sequential Search"
-              << "| " << left << setw(20) << "Binary Search" << " |" << endl;
-    cout << "----------------------------------------------------------------------" << endl;
+    const int PERULANGAN = 500000;
 
-    for (int n : sizes) {
-        vector<int> numbers;
-        for (int i = 0; i < n; ++i) {
+    std::vector<int> sizes = {32, 1024};
+
+    std::cout << "Tabel Komparasi Waktu Eksekusi TOTAL (" << PERULANGAN << " kali perulangan)" << std::endl;
+    std::cout << "-----------------------------------------------------------------" << std::endl;
+    std::cout << "| " << std::left << std::setw(20) << "Ukuran Data (n)"
+              << "| " << std::left << std::setw(20) << "Sequential Search"
+              << "| " << std::left << std::setw(20) << "Binary Search" << " |" << std::endl;
+    std::cout << "-----------------------------------------------------------------" << std::endl;
+
+    for (int n : sizes)
+    {
+        std::vector<int> numbers;
+        for (int i = 0; i < n; ++i)
+        {
             numbers.push_back(rand() % (n * 10));
         }
-
         int x = numbers[rand() % n];
-        sort(numbers.begin(), numbers.end());
-        
-        auto start_seq = chrono::high_resolution_clock::now();
-        for(int i = 0; i < REPETITIONS; ++i) {
-            volatile int result = sequential_search(numbers, x);
+        std::sort(numbers.begin(), numbers.end());
+
+        clock_t start_seq = clock();
+
+        for (int i = 0; i < PERULANGAN; ++i)
+        {
+            sequential_search(numbers, x);
         }
-        auto end_seq = chrono::high_resolution_clock::now();
-        long long duration_seq_total = chrono::duration_cast<chrono::nanoseconds>(end_seq - start_seq).count();
-        double avg_time_seq = (double)duration_seq_total / REPETITIONS;
 
+        clock_t end_seq = clock();
 
-        auto start_bin = chrono::high_resolution_clock::now();
-        for(int i = 0; i < REPETITIONS; ++i) {
-            volatile int result = binary_search(numbers, x);
+        double total_waktu_seq = double(end_seq - start_seq) / CLOCKS_PER_SEC;
+
+        clock_t start_bin = clock();
+        for (int i = 0; i < PERULANGAN; ++i)
+        {
+            binary_search(numbers, x);
         }
-        auto end_bin = chrono::high_resolution_clock::now();
-        long long duration_bin_total = chrono::duration_cast<chrono::nanoseconds>(end_bin - start_bin).count();
-        double avg_time_bin = (double)duration_bin_total / REPETITIONS;
+        clock_t end_bin = clock();
+        double total_waktu_bin = double(end_bin - start_bin) / CLOCKS_PER_SEC;
 
-
-        cout << fixed << setprecision(2);
-        cout << "| " << left << setw(20) << n
-                  << "| " << left << setw(20) << avg_time_seq
-                  << "| " << left << setw(20) << avg_time_bin << " |" << endl;
+        std::cout << std::fixed << std::setprecision(5);
+        std::cout << "| " << std::left << std::setw(20) << n
+                  << "| " << std::left << std::setw(20) << total_waktu_seq
+                  << "| " << std::left << std::setw(20) << total_waktu_bin << " |" << std::endl;
     }
-    
-    cout << "----------------------------------------------------------------------" << endl;
+
+    std::cout << "-----------------------------------------------------------------" << std::endl;
 
     return 0;
 }
