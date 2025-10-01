@@ -1,48 +1,39 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <ctime>
-#include <iomanip>
+#include <iostream>  // ini agar bisa input dan output menggunakan cin dan cout
+#include <vector>    // ini agar bisa membuat array lebih fleksibel/dinamis
+#include <algorithm> // ini agar bisa menggunakan fungsi sort
 
 #include "sequential_search.cpp"
 #include "binary_search.cpp"
 
+using namespace std;
+
 int main()
 {
-    srand(time(0));
 
-    const int PERULANGAN = 500000;
-
-    std::vector<int> sizes = {32, 1024};
-
-    std::cout << "Tabel Komparasi Waktu Eksekusi TOTAL (" << PERULANGAN << " kali perulangan)" << std::endl;
-    std::cout << "-----------------------------------------------------------------" << std::endl;
-    std::cout << "| " << std::left << std::setw(20) << "Ukuran Data (n)"
-              << "| " << std::left << std::setw(20) << "Sequential Search"
-              << "| " << std::left << std::setw(20) << "Binary Search" << " |" << std::endl;
-    std::cout << "-----------------------------------------------------------------" << std::endl;
+    const int PERULANGAN = 500000;  // Jumlah pengulangan
+    vector<int> sizes = {32, 1024}; // membuat array dinamis untuk ukuran data yang akan diuji
 
     for (int n : sizes)
     {
-        std::vector<int> numbers;
+        cout << "\n--- Hasil untuk Ukuran Data: " << n << " ---" << endl;
+
+        vector<int> numbers; // array dinamis untuk menyimpan data
         for (int i = 0; i < n; ++i)
         {
-            numbers.push_back(rand() % (n * 10));
+            numbers.push_back(rand() % (n * 10)); //  Menambahkan elemen baru ke akhir
         }
-        int x = numbers[rand() % n];
-        std::sort(numbers.begin(), numbers.end());
+        int x = numbers[rand() % n];          // Menghasilkan sebuah angka acak.
+        sort(numbers.begin(), numbers.end()); // Mengurutkan data agar bisa digunakan pada binary search
 
-        clock_t start_seq = clock();
-
+        clock_t start_seq = clock(); // Mencatat "waktu" CPU saat ini dan menyimpannya ke variabel start_seq.
         for (int i = 0; i < PERULANGAN; ++i)
         {
             sequential_search(numbers, x);
         }
+        clock_t end_seq = clock();                                             // Mencatat "waktu" CPU lagi setelah loop selesai. Ini adalah titik akhir "stopwatch".
+        double total_waktu_seq = double(end_seq - start_seq) / CLOCKS_PER_SEC; // Menghitung total waktu yang berlalu. Caranya: (waktu akhir - waktu awal) dibagi dengan CLOCKS_PER_SEC (sebuah konstanta untuk mengubah "tik" CPU menjadi detik).
 
-        clock_t end_seq = clock();
-
-        double total_waktu_seq = double(end_seq - start_seq) / CLOCKS_PER_SEC;
-
+        // sama kayak di atas, tapi untuk binary search
         clock_t start_bin = clock();
         for (int i = 0; i < PERULANGAN; ++i)
         {
@@ -51,13 +42,11 @@ int main()
         clock_t end_bin = clock();
         double total_waktu_bin = double(end_bin - start_bin) / CLOCKS_PER_SEC;
 
-        std::cout << std::fixed << std::setprecision(5);
-        std::cout << "| " << std::left << std::setw(20) << n
-                  << "| " << std::left << std::setw(20) << total_waktu_seq
-                  << "| " << std::left << std::setw(20) << total_waktu_bin << " |" << std::endl;
+        cout << "Sequential Search butuh waktu: " << total_waktu_seq << " detik" << endl;
+        cout << "Binary Search butuh waktu:   " << total_waktu_bin << " detik" << endl;
     }
 
-    std::cout << "-----------------------------------------------------------------" << std::endl;
+    cout << "\nSelesai." << endl;
 
     return 0;
 }
