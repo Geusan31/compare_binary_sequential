@@ -1,6 +1,6 @@
 #include <vector> // untuk menggunakan array dinamis
 using namespace std;
-
+// 
 int binary_search(const vector<int> &data, int target) // menerima parameter berupa array dinamis dan target yang dicari
 {
     int low = 0;                // Membuat variabel low yang menandai batas paling kiri dari area pencarian

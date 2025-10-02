@@ -10,8 +10,8 @@ using namespace std;
 int main()
 {
 
-    const int PERULANGAN = 500000;  // Jumlah pengulangan
-    vector<int> sizes = {32, 1024}; // membuat array dinamis untuk ukuran data yang akan diuji
+    const int PERULANGAN = 50000;          // Jumlah pengulangan
+    vector<int> sizes = {32, 1024, 32764}; // membuat array dinamis untuk ukuran data yang akan diuji
 
     for (int n : sizes)
     {
@@ -31,7 +31,7 @@ int main()
             sequential_search(numbers, x);
         }
         clock_t end_seq = clock();                                             // Mencatat "waktu" CPU lagi setelah loop selesai. Ini adalah titik akhir "stopwatch".
-        double total_waktu_seq = double(end_seq - start_seq) / CLOCKS_PER_SEC; // Menghitung total waktu yang berlalu. Caranya: (waktu akhir - waktu awal) dibagi dengan CLOCKS_PER_SEC (sebuah konstanta untuk mengubah "tik" CPU menjadi detik).
+        double total_waktu_seq = double(end_seq - start_seq) / CLOCKS_PER_SEC; // Menghitung total waktu yang berlalu. (waktu akhir - waktu awal) dibagi sama CLOCKS_PER_SEC (konstanta buat ngubah "tik" CPU menjadi detik).
 
         // sama kayak di atas, tapi untuk binary search
         clock_t start_bin = clock();
@@ -45,8 +45,5 @@ int main()
         cout << "Sequential Search butuh waktu: " << total_waktu_seq << " detik" << endl;
         cout << "Binary Search butuh waktu:   " << total_waktu_bin << " detik" << endl;
     }
-
-    cout << "\nSelesai." << endl;
-
     return 0;
 }

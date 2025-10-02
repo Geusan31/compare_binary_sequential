@@ -1,4 +1,3 @@
-#include "sequential_search.h" // include header file
 #include <vector>              // agar bisa menggunakan array dinmais
 using namespace std;
 
